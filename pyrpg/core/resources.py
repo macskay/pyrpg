@@ -1,4 +1,5 @@
 from pkg_resources import resource_listdir, resource_filename
+import pygame
 
 
 def list_maps():
@@ -27,4 +28,11 @@ def get_font_asset(name):
 
 def get_sound_asset(name):
     return resource_filename("pyrpg.assets.sounds", name)
+
+
+def get_tile_from_tileset(name, pos, size=(32, 32)):
+    res = get_image_asset(name)
+    img = pygame.image.load(res).convert()
+    sub = pygame.Rect(pos[0]*size[0], pos[1]*size[1], *size)
+    return img.subsurface(sub).convert()
 
