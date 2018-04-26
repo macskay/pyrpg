@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="45">
- <tileset firstgid="1" name="personen-dp" tilewidth="16" tileheight="16" tilecount="0" columns="0">
-  <image source="personen-dp.png" width="900" height="2522"/>
- </tileset>
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="45">
  <tileset firstgid="1" name="tileset-shinygold" tilewidth="16" tileheight="16" tilecount="2144" columns="8">
   <image source="tileset-shinygold.png" width="128" height="4300"/>
  </tileset>
