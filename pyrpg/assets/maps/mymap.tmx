@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="45">
+ <tileset firstgid="1" name="personen-dp" tilewidth="16" tileheight="16" tilecount="0" columns="0">
+  <image source="personen-dp.png" width="900" height="2522"/>
+ </tileset>
+ <tileset firstgid="1" name="tileset-shinygold" tilewidth="16" tileheight="16" tilecount="2144" columns="8">
+  <image source="tileset-shinygold.png" width="128" height="4300"/>
+ </tileset>
+ <layer name="Boden" width="32" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztwwENAAAMw6DOv+kLOSSsmqqqbx6PtAKB
+  </data>
+ </layer>
+ <objectgroup name="Objekte">
+  <object id="6" name="Wand" x="0" y="0" width="512" height="48"/>
+  <object id="7" name="Wand" x="480" y="48" width="32" height="272"/>
+  <object id="8" name="Wand" x="432" y="176" width="48" height="32"/>
+  <object id="9" name="Wand" x="448" y="208" width="32" height="16"/>
+  <object id="10" name="Wand" x="464" y="224" width="16" height="16"/>
+  <object id="11" name="Wand" x="384" y="272" width="48" height="16"/>
+  <object id="12" name="Wand" x="416" y="208" width="16" height="64"/>
+  <object id="13" name="Wand" x="368" y="208" width="48" height="16"/>
+  <object id="14" name="Wand" x="368" y="192" width="64" height="16"/>
+  <object id="15" name="Wand" x="416" y="272" width="64" height="48"/>
+  <object id="16" name="Wand" x="384" y="288" width="32" height="32"/>
+  <object id="17" name="Wand" x="96" y="304" width="288" height="16"/>
+  <object id="19" name="Wand" x="0" y="112" width="96" height="208"/>
+  <object id="20" name="Wand" x="0" y="80" width="32" height="32"/>
+  <object id="21" name="Wand" x="96" y="112" width="80" height="64"/>
+  <object id="22" name="Wand" x="176" y="128" width="48" height="32"/>
+  <object id="23" name="Wand" x="112" y="192" width="80" height="48"/>
+  <object id="24" name="Wand" x="192" y="224" width="16" height="16"/>
+  <object id="25" name="Wand" x="128" y="240" width="16" height="16"/>
+  <object id="26" name="Wand" x="240" y="192" width="32" height="32"/>
+  <object id="27" name="Wand" x="256" y="224" width="16" height="16"/>
+  <object id="28" name="Wand" x="304" y="256" width="16" height="16"/>
+  <object id="29" name="Wand" x="320" y="208" width="48" height="64"/>
+  <object id="30" name="Wand" x="320" y="96" width="80" height="64"/>
+  <object id="31" name="Wand" x="432" y="112" width="16" height="16"/>
+  <object id="32" name="Wand" x="432" y="144" width="16" height="16"/>
+  <object id="33" name="Wand" x="304" y="144" width="16" height="16"/>
+  <object id="34" name="Wand" x="288" y="144" width="16" height="16"/>
+  <object id="35" name="Wand" x="272" y="112" width="16" height="16"/>
+  <object id="36" name="Wand" x="224" y="112" width="16" height="16"/>
+  <object id="37" name="Wand" x="240" y="64" width="16" height="16"/>
+  <object id="38" name="Wand" x="432" y="48" width="16" height="16"/>
+  <object id="39" name="Wand" x="144" y="64" width="16" height="16"/>
+  <object id="40" name="Wand" x="96" y="48" width="32" height="32"/>
+  <object id="42" name="Wand" x="160" y="48" width="64" height="32"/>
+  <object id="43" name="Wand" x="64" y="64" width="16" height="16"/>
+  <object id="44" name="Wand" x="144" y="272" width="128" height="16"/>
+ </objectgroup>
+ <layer name="Strassen" width="32" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFAwmUkLDyANhvBMXSQKxNhn49INYnAhsQMEcTiEUYUMMDFib47FABYl0gtseDdYDYgoD9hgyIsEDGxkBsR8B8BwJmmxFhPy3BqP20sZ/YtK9CI/th6RKUvgnlAQca2A8DwzV+B4v9hNIZrdIXDBAq/4gpX2kJQOGvykB6nUMtgCt8HOhkPyUAALmqGpw=
+  </data>
+ </layer>
+ <layer name="Verzierungen" width="32" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFIwWoE6GGiQR9GhS4ZSCAOSPxav+DCBLUEwPsSTCPHaiWgxES9jDsCeR7AbE3VNwSiK2hcsT4zZ0E+/mBagXQ7A8E8oOAOBhqjiMQO0PVk+I3YoA6FhwJtCMKiKOhdnkCsTdUPchvrQTMJCW9YrM/EWhHEhAnU9mvtALvgfgDEk1v8B2IfyDR9AZlSLiUSmaipzF8aSoQiIOAOBiI68m0j5gyGxeIBOIoII6mwH5SAHrYJAJxEhAnU2h/HxD348ATCOiFxX8tBfZTA/ADscAAuwEbAACXCyGp
+  </data>
+ </layer>
+ <layer name="Bäume" width="32" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzlVssKgCAQ9FaXskuPi9X/f2UbuJfBJVxWDRwYht1AZ3SRvHNuIfpGuhOPhnoR74SyP6yxr1VeRwL7wxr7WvA6A3FMfGefWGNfC7z/2uB92Qefg3Qe1via/9LA/Kil0WP+iThHWuTPndWVuEVa5M+9q0A8Iy3ya96i14NVfi2C62/+8X2tnV/aR8qPfq30b/8/D9qEF8I=
+  </data>
+ </layer>
+ <layer name="Häuser" width="32" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztzzkSQUEURuFb763KFJgCU2AKTAvCE5gCU2AWIUKECMtyltDo6lel+q/64nOviJ3d/yzgiAQRQhgRx2w/Si+GOBJIGu6n6KWRQRY5w/08vQKKKKFsuF+hV0UNdTQM93Wuye0ttOGhY/iXLr0e+hhgqNDfuCJb7Nzf+yN6Y0wwxUyhv6d7wFFDf05vgSVWWCv0T3TPuGjof7Mr3RvuPvUfdJ94+dS3+2xv+LUeYA==
+  </data>
+ </layer>
+</map>
