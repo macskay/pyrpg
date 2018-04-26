@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="48">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="57">
  <tileset firstgid="1" name="tileset-shinygold" tilewidth="16" tileheight="16" tilecount="2144" columns="8">
   <image source="tileset-shinygold.png" width="128" height="4300"/>
  </tileset>
@@ -25,14 +25,14 @@
   <object id="20" name="Wall" x="0" y="80" width="32" height="32"/>
   <object id="21" name="Wall" x="96" y="112" width="80" height="64"/>
   <object id="22" name="Wall" x="176" y="128" width="48" height="32"/>
-  <object id="23" name="Wall" x="112" y="192" width="80" height="48"/>
+  <object id="23" name="Wall" x="112" y="192" width="80" height="32"/>
   <object id="24" name="Wall" x="192" y="224" width="16" height="16"/>
   <object id="25" name="Wall" x="128" y="240" width="16" height="16"/>
   <object id="26" name="Wall" x="240" y="192" width="32" height="32"/>
   <object id="27" name="Wall" x="256" y="224" width="16" height="16"/>
   <object id="28" name="Wall" x="304" y="256" width="16" height="16"/>
-  <object id="29" name="Wall" x="320" y="208" width="48" height="64"/>
-  <object id="30" name="Wall" x="320" y="96" width="80" height="64"/>
+  <object id="29" name="Wall" x="320" y="208" width="48" height="48"/>
+  <object id="30" name="Wall" x="320" y="96" width="80" height="48"/>
   <object id="31" name="Wall" x="432" y="112" width="16" height="16"/>
   <object id="32" name="Wall" x="432" y="144" width="16" height="16"/>
   <object id="33" name="Wall" x="304" y="144" width="16" height="16"/>
@@ -46,6 +46,17 @@
   <object id="42" name="Wall" x="160" y="48" width="64" height="32"/>
   <object id="43" name="Wall" x="64" y="64" width="16" height="16"/>
   <object id="44" name="Wall" x="144" y="272" width="128" height="16"/>
+  <object id="48" name="Wall" x="320" y="144" width="16" height="16"/>
+  <object id="49" name="Wall" x="352" y="144" width="48" height="16"/>
+  <object id="50" name="Wall" x="112" y="224" width="32" height="16"/>
+  <object id="51" name="Wall" x="160" y="224" width="32" height="16"/>
+  <object id="52" name="Wall" x="320" y="256" width="16" height="16"/>
+  <object id="53" name="Wall" x="352" y="256" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="Trigger">
+  <object id="54" name="House_2" x="336" y="144" width="16" height="16"/>
+  <object id="55" name="House_1" x="144" y="224" width="16" height="16"/>
+  <object id="56" name="House_3" x="336" y="256" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Player">
   <object id="47" name="Player" x="0" y="48" width="16" height="16"/>
@@ -68,6 +79,11 @@
  <layer name="Houses" width="32" height="20">
   <data encoding="base64" compression="zlib">
    eJztzzkSQUEURuFb763KFJgCU2AKTAvCE5gCU2AWIUKECMtyltDo6lel+q/64nOviJ3d/yzgiAQRQhgRx2w/Si+GOBJIGu6n6KWRQRY5w/08vQKKKKFsuF+hV0UNdTQM93Wuye0ttOGhY/iXLr0e+hhgqNDfuCJb7Nzf+yN6Y0wwxUyhv6d7wFFDf05vgSVWWCv0T3TPuGjof7Mr3RvuPvUfdJ94+dS3+2xv+LUeYA==
+  </data>
+ </layer>
+ <layer name="Tops" width="32" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFIxmwAzHHQDuCisCSiYHBCoitgdgGiG2ZEHLmjLj1wcKBluFhj8d+YoAnUL8XEHtjMQef3+gBKPXbSAC8UMxHpPpOYNrtAuJuIO4B4l4mVHlCafU9EH9AoukBljEzMCwH4hXMdLJwFIwCGgD0+oBcerADAHyXDGs=
   </data>
  </layer>
 </map>
