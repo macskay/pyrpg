@@ -12,11 +12,13 @@ class LevelScene(taz.Scene):
     def __init__(self, identifier):
         super(LevelScene, self).__init__(identifier)
 
+        self.key_held = False
         self.screen = None
         self.map = None
         self.render_surface = None
         self.player = None
         self.scaling = None
+        self.delta_accumulator = 0.0
 
     def initialize(self):
         self.screen = self.game.render_context["screen"]
@@ -26,12 +28,19 @@ class LevelScene(taz.Scene):
         self.player = self.load_player()
 
     def render(self):
-        pygame.display.flip()
-        self.render_layers()
-        self.render_player()
+        if self.delta_accumulator >= self.game.render_context["RENDER_FREQUENCY"]:
+            pygame.display.flip()
+            self.render_layers()
+            self.render_player()
+
+            self.delta_accumulator = 0.0
 
     def update(self):
-        self.handle_inputs()
+        delta = self.game.update_context["clock"].tick(self.game.update_context["UPDATE_FREQUENCY"])
+        self.delta_accumulator += delta
+
+        self.handle_inputs(delta)
+        self.player.update(pygame.key.get_pressed(), delta)
 
     def pause(self):
         pass
@@ -42,14 +51,14 @@ class LevelScene(taz.Scene):
     def tear_down(self):
         pass
 
-    def handle_inputs(self):
+    def handle_inputs(self, delta):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 raise taz.Game.GameExitException
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                self.handle_mouse_clicks(event)
             if event.type == pygame.KEYDOWN:
-                self.handle_keybord_input(event)
+                self.handle_keybord_input(event, delta)
+            if event.type == pygame.KEYUP:
+                self.game.render_context["key_held"] = False
 
     def load_map(self):
         return pytmx.util_pygame.load_pygame(resources.get_map_asset('mymap.tmx'))
@@ -68,43 +77,18 @@ class LevelScene(taz.Scene):
         for x, y, tile in layer.tiles():
             self.render_surface.blit(tile, (x * tile.get_width(), y * tile.get_height()))
 
-    def can_walk_to_position(self, position):
-        scaled_position = self.get_scaled_position(position)
-        for obj in self.get_object_group("Walls"):
-            obj = self.convert_object_to_rect(obj)
-            if obj.collidepoint(scaled_position):
-                return True
-        return False
-
-    def get_object_group(self, name):
-        for og in self.map.objectgroups:
-            if og.name == name:
-                return og
-
-    def get_scaled_position(self, pos):
-        return pos[0] / self.scaling[0], pos[1] / self.scaling[1]
-
-    @staticmethod
-    def convert_object_to_rect(obj):
-        return pygame.Rect(obj.x, obj.y, obj.width, obj.height)
-
     def load_player(self):
-        tile = self.get_object_group("Player")[0]
-        pos = int(tile.x*self.scaling[0]), int(tile.y*self.scaling[1])
-        size = int(tile.width*self.scaling[0]), int(tile.height*self.scaling[1])
-        return player.Player(pos, size)
-
-    # only for debugging, get's removed eventually
-    def handle_mouse_clicks(self, event):
-        if self.can_walk_to_position(event.pos):
-            print("collision")
+        return player.Player(list(self.map.objectgroups), self.scaling, self.game)
 
     def render_player(self):
         self.player.render(self.screen)
 
-    def handle_keybord_input(self, event):
+    def handle_keybord_input(self, event, delta):
         if event.key in [pygame.K_DOWN, pygame.K_UP, pygame.K_RIGHT, pygame.K_LEFT]:
-            self.player.move(event.key)
+            self.game.render_context["key_held"] = True
+            if not self.player.animation_running:
+                self.player.update(pygame.key.get_pressed(), delta)
+
 
 
 
