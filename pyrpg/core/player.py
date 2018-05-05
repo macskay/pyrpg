@@ -2,6 +2,8 @@ import pygame
 import core.resources as resources
 import animation as ani
 import logging
+import yaml
+from ast import literal_eval as make_tuple
 
 logger = logging.getLogger(__name__)
 
@@ -22,35 +24,64 @@ SPRITE_WALKING_DOWN_RIGHT_FOOT = 8
 TILE_SIZE = 16
 
 
-class Player(object):
+class Inventory(object):
+    MAX_SIZE = 10
 
-    def __init__(self, objectgroups, scaling, game):
-        self.scaling = scaling
-        self.objectgroups = objectgroups
-        self.game = game
+    def __init__(self):
+        self.storage = []
+
+    def add(self, item):
+        self.storage.append(item)
+
+    def remove(self, item):
+        self.storage.remove(item)
+
+    def size(self):
+        return len(self.storage)
+
+    def __str__(self):
+        return "Bag {}/10: {}".format(len(self.storage), self.storage)
+
+    def __iter__(self):
+        for item in self.storage:
+            yield item
+
+
+class Player(object):
+    def __init__(self):
+        self.game = None
         self.standing_sprite = None
         self.previous_pos = ()
-
+        self.sprite_group = None
         self.foot = True
-
-        tile = self.get_object_group("Player")[0]
-
-        pos = int(tile.x*scaling[0]), int(tile.y*scaling[1])
-        size = int(tile.width*scaling[0]), int(tile.height*scaling[1])
-
-        self.sprite_group = self.load_sprites(pos, size)
         self.animations = pygame.sprite.Group()
         self.animation_running = False
+        self.inventory = Inventory()
+
+    def spawn(self, game, spawn_pos=None):
+        self.game = game
+
+        scaling = self.get_scaling()
+        tile = self.get_object_group("Player")[0]
+
+        pos = (int(tile.x*scaling[0]), int(tile.y*scaling[1])) if spawn_pos is None else make_tuple(spawn_pos)
+        size = int(tile.width*scaling[0]), int(tile.height*scaling[1])
+        self.sprite_group = self.load_sprites(pos, size)
+
+    def move_player_to_pos(self, pos):
+        sprite = self.sprite_group.sprite
+        active = sprite.active_sprite
+        self.sprite_group = self.load_sprites(pos, sprite.size, active)
 
     def get_object_group(self, name):
-        for og in self.objectgroups:
+        for og in self.game.update_context["MAP_OBJECTS"]:
             if og.name == name:
                 return og
 
     @staticmethod
-    def load_sprites(pos, size):
+    def load_sprites(pos, size, active=None):
         sprites = pygame.sprite.GroupSingle()
-        sprites.add(PlayerSprite(pos, size))
+        sprites.add(PlayerSprite(pos, size, active))
         return sprites
 
     def update(self, key, delta):
@@ -88,18 +119,23 @@ class Player(object):
             self.animation_running = True
             self.animations.add(a)
 
+    def get_scaling(self):
+        return self.game.update_context["MAP_SCALING"]
+
     def can_walk_to_pos(self, sprite, x, y):
         new_pos = self.get_scaled_position((sprite.rect.x+x, sprite.rect.y+y))
         for obj in self.get_object_group("Walls"):
             obj = self.convert_object_to_rect(obj)
-            size = sprite.rect.width // self.scaling[0], sprite.rect.height // self.scaling[1]
+            scaling = self.get_scaling()
+            size = sprite.rect.width // scaling[0], sprite.rect.height // scaling[1]
             rect = pygame.Rect(new_pos, size)
             if obj.colliderect(rect):
                 return False
         return True
 
     def get_scaled_position(self, pos):
-        return pos[0] / self.scaling[0], pos[1] / self.scaling[1]
+        scaling = self.get_scaling()
+        return pos[0] / scaling[0], pos[1] / scaling[1]
 
     def update_walking_sprite(self, x, y):
         walk = None
@@ -137,6 +173,11 @@ class Player(object):
         player_facing = self.sprite_group.sprite.active_sprite
         is_facing, obj_props = self.facing_usable_object(player_facing)
         if is_facing:
+            if "item" in obj_props:
+                if obj_props["item"] not in self.inventory:
+                    self.inventory.add(obj_props["item"])
+                else:
+                    return obj_props["collected"]
             return obj_props["hint"]
         return None
 
@@ -173,13 +214,20 @@ class Player(object):
         dest = self.previous_pos
         self.start_animiation(x=dest[0], y=dest[1], relative=False)
 
+    def meet_requisites(self, props):
+        if "pre_req" in props:
+            if props["pre_req"] in self.inventory:
+                return True
+            return False
+        return True
+
 
 class PlayerSprite(pygame.sprite.Sprite):
-    def __init__(self, pos, size):
+    def __init__(self, pos, size, active=None):
         pygame.sprite.Sprite.__init__(self)
         self.size = size
         self.image = None
-        self.active_sprite = SPRITE_STANDING_RIGHT
+        self.active_sprite = SPRITE_STANDING_RIGHT if active is None else active
 
         self.sprite_set = self.load_tiles()
         self.change_active_sprite(self.active_sprite)
@@ -208,10 +256,3 @@ class PlayerSprite(pygame.sprite.Sprite):
 
     def move_sprite(self, pos):
         self.rect.x, self.rect.y = pos
-
-
-
-
-
-
-

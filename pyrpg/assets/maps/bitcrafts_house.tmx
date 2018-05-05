@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="16">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="38">
+ <properties>
+  <property name="name" value="PlayerHouse"/>
+ </properties>
  <tileset firstgid="1" name="colors" tilewidth="16" tileheight="16" tilecount="2" columns="2">
   <image source="../images/colors.png" width="32" height="16"/>
  </tileset>
@@ -84,7 +87,30 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Walls"/>
- <objectgroup name="Trigger"/>
- <objectgroup name="Player"/>
+ <objectgroup name="Walls">
+  <object id="19" name="Wall" x="160" y="48" width="16" height="144"/>
+  <object id="20" name="Wall" x="176" y="48" width="176" height="16"/>
+  <object id="21" name="Wall" x="336" y="48" width="16" height="144"/>
+  <object id="22" name="Wall" x="176" y="176" width="80" height="16"/>
+  <object id="23" name="Wall" x="176" y="128" width="16" height="32"/>
+  <object id="24" name="Wall" x="176" y="96" width="16" height="16"/>
+  <object id="26" name="Wall" x="192" y="80" width="48" height="16"/>
+  <object id="27" name="Wall" x="256" y="80" width="32" height="16"/>
+  <object id="28" name="Wall" x="320" y="96" width="16" height="16"/>
+  <object id="29" name="Wall" x="320" y="112" width="16" height="32"/>
+  <object id="30" name="Wall" x="288" y="112" width="32" height="32"/>
+  <object id="31" name="Wall" x="272" y="176" width="64" height="16"/>
+ </objectgroup>
+ <objectgroup name="Trigger">
+  <object id="36" name="Trigger" x="256" y="176" width="16" height="16">
+   <properties>
+    <property name="level" value="Level"/>
+    <property name="scene" value="pop"/>
+    <property name="spawn_pos" value="(360.0, 600.0)"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Player">
+  <object id="17" name="Player" x="256" y="160" width="16" height="16"/>
+ </objectgroup>
 </map>

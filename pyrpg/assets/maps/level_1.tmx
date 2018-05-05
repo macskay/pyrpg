@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="32" height="20" tilewidth="16" tileheight="16" infinite="0" nextobjectid="70">
+ <properties>
+  <property name="name" value="Level"/>
+ </properties>
  <tileset firstgid="1" name="tileset-shinygold" tilewidth="16" tileheight="16" tilecount="2144" columns="8">
   <image source="../images/tileset-shinygold.png" width="128" height="4300"/>
  </tileset>
@@ -84,21 +87,31 @@
   </object>
   <object id="65" name="Tree 2" x="240" y="64" width="16" height="16">
    <properties>
-    <property name="hint" value="This is a bush!"/>
+    <property name="collected" value="There is nothing else here."/>
+    <property name="hint" value="This is a bush! I can something at the bottom....Wow, a key with the initials SSJ-WKM"/>
+    <property name="item" value="key_wkmanire"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="Trigger">
-  <object id="54" name="House_2" x="336" y="144" width="16" height="16"/>
-  <object id="55" name="House_1" x="144" y="224" width="16" height="8">
+  <object id="54" name="Wkmanires House" x="336" y="144" width="16" height="16">
    <properties>
-    <property name="level" value="players_house"/>
+    <property name="hint" value="Hmm... This house is locked. I need to find the key first."/>
+    <property name="level" value="WkmaniresHouse"/>
+    <property name="pre_req" value="key_wkmanire"/>
+    <property name="scene" value="push"/>
+   </properties>
+  </object>
+  <object id="55" name="Bitcrafts House" x="144" y="224" width="16" height="8">
+   <properties>
+    <property name="level" value="BitcraftsHouse"/>
+    <property name="scene" value="push"/>
    </properties>
   </object>
   <object id="56" name="House_3" x="336" y="256" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Player">
-  <object id="47" name="Player" x="160" y="256" width="16" height="16"/>
+  <object id="47" name="Player" x="240" y="96" width="16" height="16"/>
  </objectgroup>
  <layer name="Streets" width="32" height="20">
   <data encoding="base64" compression="zlib">

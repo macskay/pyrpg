@@ -3,11 +3,15 @@ import pygame
 
 
 def list_maps():
-    print(resource_listdir('pyrpg.assets.maps', ''))
+    return resource_listdir('pyrpg.assets.maps', '')
 
 
 def list_data():
-    print(resource_listdir('pyrpg.assets.data', ''))
+    return resource_listdir('pyrpg.assets.data', '')
+
+
+def list_item_assets():
+    return resource_listdir('pyrpg.assets.images.items', '')
 
 
 def get_data_asset(name):
@@ -20,6 +24,10 @@ def get_map_asset(name):
 
 def get_image_asset(name):
     return resource_filename("pyrpg.assets.images", name)
+
+
+def get_item_asset(name):
+    return resource_filename("pyrpg.assets.images.items", name)
 
 
 def get_font_asset(name):

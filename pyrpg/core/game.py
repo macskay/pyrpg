@@ -1,13 +1,10 @@
 import logging
 
-import core
 import pygame
 import taz.game as taz
 import core.resources as resources
-import core.player as player
 import core.ui as ui
 import pytmx
-import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +15,6 @@ class LevelScene(taz.Scene):
 
         self.key_held = False
         self.screen = None
-        self.map = None
         self.low_layers_render_surface = None
         self.top_layer_render_surface = None
         self.top_layer = None
@@ -31,23 +27,26 @@ class LevelScene(taz.Scene):
         self.delta_accumulator = 0.0
 
     def initialize(self):
-        self.screen = self.game.render_context["screen"]
+        self.screen = self.game.render_context["SCREEN"]
 
         self.load_map("{}.tmx".format(self.level_name))
-        self.player = self.load_player()
+        self.player = self.game.update_context["PLAYER"]
+        self.player.spawn(self.game, self.game.update_context["PLAYER_SPAWN"])
         self.ui = ui.HUD(self.screen.get_size())
 
     def load_map(self, level_name):
-        self.map = pytmx.util_pygame.load_pygame(resources.get_map_asset(level_name))
-        self.low_layers_render_surface = pygame.Surface(
-            (self.map.width * self.map.tilewidth, self.map.height * self.map.tileheight))
-        self.top_layer_render_surface = pygame.Surface(
-            (self.map.width * self.map.tilewidth, self.map.height * self.map.tileheight), pygame.SRCALPHA)
-        self.scaling = [x / y for x, y in zip(self.screen.get_size(), self.low_layers_render_surface.get_size())]
-        self.build_layer_surfaces()
+        m = pytmx.util_pygame.load_pygame(resources.get_map_asset(level_name))
+        self.game.update_context["MAP_OBJECTS"] = list(m.objectgroups)
+        self.game.update_context["MAP_LAYERS"] = list(m.layers)
 
-    def load_player(self):
-        return player.Player(list(self.map.objectgroups), self.scaling, self.game)
+        self.low_layers_render_surface = pygame.Surface(
+            (m.width * m.tilewidth, m.height * m.tileheight))
+        self.top_layer_render_surface = pygame.Surface(
+            (m.width * m.tilewidth, m.height * m.tileheight), pygame.SRCALPHA)
+
+        self.game.update_context["MAP_SCALING"] = [x / y for x, y in zip(self.screen.get_size(), self.low_layers_render_surface.get_size())]
+
+        self.build_layer_surfaces()
 
     def build_layer_surfaces(self):
         for layer in self.get_layers():
@@ -57,7 +56,7 @@ class LevelScene(taz.Scene):
                 self.render_layer(layer, self.low_layers_render_surface)
 
     def get_layers(self):
-        for layer in self.map:
+        for layer in self.game.update_context["MAP_LAYERS"]:
             if isinstance(layer, pytmx.TiledTileLayer):
                 yield layer
 
@@ -67,32 +66,33 @@ class LevelScene(taz.Scene):
             surface.blit(tile, (x * tile.get_width(), y * tile.get_height()))
 
     def update(self):
-        pygame.display.set_caption("FPS: {}".format(int(self.game.update_context["clock"].get_fps())))
-        delta = self.game.update_context["clock"].tick(self.game.update_context["UPDATE_FREQUENCY"])
+        pygame.display.set_caption("FPS: {}".format(int(self.game.update_context["CLOCK"].get_fps())))
+        delta = self.game.update_context["CLOCK"].tick(self.game.update_context["UPDATE_FREQUENCY"])
         self.delta_accumulator += delta
 
         self.handle_inputs(delta)
         self.check_for_collision()
-        if self.ui.text_box is None:
+        if not self.ui.is_hud_open():
             self.player.update(pygame.key.get_pressed(), delta)
 
     def check_for_collision(self):
         for obj in self.get_object_group("Trigger"):
             if self.player.collides_trigger(obj):
-                new_level = obj.properties["level"]
-                if "LAST_MAP_NAME" in self.game.update_context and self.game.update_context["LAST_MAP_NAME"] == new_level:
-                    self.player.start_animiation(*self.game.update_context["LAST_MAP_EXIT_POS"], relative=False, duration=1)
-                    self.player.update_sprite(self.game.update_context["LAST_MAP_FACING_DIRECTION"])
+                if self.player.meet_requisites(obj.properties):
+                    if "spawn_pos" in obj.properties:
+                        self.game.update_context["PLAYER_SPAWN"] = obj.properties["spawn_pos"]
+                    if obj.properties["scene"] == "push":
+                        self.game.push_scene_on_stack(obj.properties["level"])
+                    elif obj.properties["scene"] == "pop":
+                        self.game.pop_scene_from_stack()
                 else:
-                    self.game.update_context["LAST_MAP_EXIT_POS"] = self.player.previous_pos
-                    self.game.update_context["LAST_MAP_NAME"] = self.level_name
-                    self.game.update_context["LAST_MAP_FACING_DIRECTION"] = self.player.sprite_group.sprite.active_sprite
-
-                self.level_name = obj.properties["level"]
-                self.load_map("{}.tmx".format(self.level_name))
+                    hint = obj.properties["hint"]
+                    if hint is not None:
+                        self.ui.draw_text(hint)
+                    self.player.move_player_to_pos(self.player.previous_pos)
 
     def get_object_group(self, name):
-        for og in self.map.objectgroups:
+        for og in self.game.update_context["MAP_OBJECTS"]:
             if og.name == name:
                 return og
 
@@ -104,9 +104,12 @@ class LevelScene(taz.Scene):
                 self.handle_keybord_input(event, delta)
             if event.type == pygame.KEYUP:
                 self.game.render_context["key_held"] = False
+            if event.type == pygame.MOUSEMOTION:
+                if self.ui.is_inventory_open():
+                    self.ui.show_inventory_hint(event.pos)
 
     def handle_keybord_input(self, event, delta):
-        if self.ui.text_box is None:
+        if not self.ui.is_hud_open():
             if event.key in [pygame.K_DOWN, pygame.K_UP, pygame.K_RIGHT, pygame.K_LEFT]:
                 self.game.render_context["key_held"] = True
                 if not self.player.animation_running:
@@ -118,6 +121,9 @@ class LevelScene(taz.Scene):
         else:
             if event.key == pygame.K_SPACE:
                 self.ui.clear_text()
+
+        if event.key == pygame.K_i:
+            self.ui.draw_inventory(self.player.inventory) if not self.ui.is_inventory_open() else self.ui.clear_inventory()
 
     def render(self):
         if self.delta_accumulator >= self.game.render_context["RENDER_FREQUENCY"]:
@@ -143,8 +149,10 @@ class LevelScene(taz.Scene):
         pass
 
     def resume(self):
-        if self.game.update_context["EXITING_BUILDING"]:
-            self.player.exit_building()
+        self.load_map("{}.tmx".format(self.level_name))
+        self.player.spawn(self.game, self.game.update_context["PLAYER_SPAWN"])
+
+        self.game.update_context["PLAYER_SPAWN"] = None
 
     def tear_down(self):
         pass
